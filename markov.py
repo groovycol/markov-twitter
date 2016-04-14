@@ -43,26 +43,10 @@ def make_chains(text_string):
 def make_text(chains):
     """Takes dictionary of markov chains; returns random text."""
 
-    # key = choice(chains.keys())
-    # words = [key[0], key[1]]
-    # while key in chains:
-    #     # Keep looping until we have a key that isn't in the chains
-    #     # (which would mean it was the end of our original text)
-    #     #
-    #     # Note that for long texts (like a full book), this might mean
-    #     # it would run for a very long time.
-
-    #     word = choice(chains[key])
-    #     words.append(word)
-    #     key = (key[1], word)
-
-    # return " ".join(words)
-
     key = choice(chains.keys())
 
     text = ' '.join(key)
 
-    #while len(text) <= 140:
     while key in chains:    
         new_word = choice(chains[key])
 
@@ -73,11 +57,7 @@ def make_text(chains):
 
         key = (key[1], new_word)
         
-
     return text
-
-
-
 
 
 def tweet(chains):
@@ -93,8 +73,11 @@ def tweet(chains):
     # This will print info about credentials to make sure they're correct
     print api.VerifyCredentials()
 
+    #create tweet
+    tweet_text = make_text(chains)
+
     # Send a tweet
-    status = api.PostUpdate('test tweet')
+    status = api.PostUpdate(tweet_text)
     print status.text
 
 # Get the filenames from the user through a command line prompt, ex:
@@ -107,8 +90,9 @@ text = open_and_read_file(filenames)
 # Get a Markov chain
 chains = make_chains(text)
 
-tweet_text = make_text(chains)
-print tweet_text
-
 # Your task is to write a new function tweet, that will take chains as input
-#tweet(chains)
+tweet(chains)
+
+while raw_input("Enter to tweet again [q to quit]") != 'q':
+    tweet(chains)
+    
